@@ -10,6 +10,13 @@
 !.yarn/releases
 !.yarn/versions
 
+# pnpm 관련
+.pnpm-store/
+
+# 캐시 파일들
+.eslintcache
+.stylelintcache
+
 # testing
 /coverage
 

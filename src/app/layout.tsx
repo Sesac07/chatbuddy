@@ -1,3 +1,4 @@
+import Header from '@/components/header';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -24,10 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="flex min-h-screen flex-col bg-gray-500 antialiased">
-        <header></header>
-        <main>{children}</main>
-        <footer></footer>
+      <body className="min-h-screen antialiased">
+        <div className="mx-auto flex max-w-7xl flex-col shadow-lg">
+          <Header />
+          <main>{children}</main>
+          <footer></footer>
+        </div>
       </body>
     </html>
   );

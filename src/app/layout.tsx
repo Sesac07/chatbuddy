@@ -26,10 +26,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="min-h-screen antialiased">
-        <div className="mx-auto flex max-w-7xl flex-col shadow-lg">
+        <div className="mx-auto flex max-w-7xl flex-col bg-amber-300 px-2">
           <Header />
           <main>{children}</main>
-          <footer></footer>
+          {/* <footer>footer 입니다.</footer> */}
         </div>
       </body>
     </html>

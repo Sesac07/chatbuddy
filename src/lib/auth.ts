@@ -84,6 +84,9 @@ export const { handlers, auth } = NextAuth({
 
   // 인증 프로바이더 설정
   providers: [Google],
+  pages: {
+    signIn: '/login',
+  },
 
   // secret: process.env.NEXTAUTH_SECRET,
 

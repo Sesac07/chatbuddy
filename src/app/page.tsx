@@ -40,14 +40,14 @@ export default function Home() {
         <p className="bg-gradient-to-r from-teal-600 via-cyan-600 to-emerald-600 bg-clip-text text-center text-5xl font-bold text-transparent">
           지금 시작하세요
         </p>
-        <p className="text-muted-foreground max-w-2xl text-center text-xl">
+        <p className="max-w-2xl text-center text-xl text-slate-600">
           당신의 성향에 맞는 방식으로 대화를 이어갑니다
         </p>
         <div className="mt-8 flex gap-4">
-          <button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-6 py-3 transition-colors">
+          <button className="rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 py-3 font-semibold text-white shadow-md transition-all duration-200 hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg">
             T로 상담받기
           </button>
-          <button className="border-border hover:bg-accent rounded-lg border px-6 py-3 transition-colors">
+          <button className="rounded-lg border-2 border-slate-300 px-6 py-3 font-semibold text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50">
             F로 상담받기
           </button>
         </div>

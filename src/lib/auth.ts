@@ -31,7 +31,7 @@ export const { handlers, auth } = NextAuth({
   // 이벤트 핸들러
   events: {
     async signIn({ user, account, profile }) {
-      console.log('signIn:', user.email);
+      console.log(' 이벤트 핸들러 signIn: 3', user, account, profile);
     },
     async signOut() {
       console.log('로그아웃');
@@ -44,7 +44,7 @@ export const { handlers, auth } = NextAuth({
     async jwt({ token, user, account }) {
       // OAuth 로그인 시 사용자 정보를 토큰에 추가
       if (account && user) {
-        console.log('jwt:', account.access_token);
+        console.log(' callbacks 토큰 jwt: 2', account.access_token);
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
         token.id = user.id;
@@ -65,17 +65,17 @@ export const { handlers, auth } = NextAuth({
 
     // 로그인 허용 여부 결정
     async signIn({ user, account, profile, email, credentials }) {
-      console.log('로그인 성공 콜백 ', user, account, profile, email, credentials);
+      console.log('로그인 성공 콜백 1', user, account, profile, email, credentials);
       return true;
     },
 
     // 리다이렉트 경로 커스터마이징
-    async redirect({ url, baseUrl }) {
-      console.log('Redirect callback - url:', url, 'baseUrl:', baseUrl);
+    // async redirect({ url, baseUrl }) {
+    //   console.log('Redirect callback - url:', url, 'baseUrl:', baseUrl);
 
-      // 기본적으로 홈페이지로 리다이렉트
-      return `${baseUrl}/`;
-    },
+    //   // 기본적으로 홈페이지로 리다이렉트
+    //   return `${baseUrl}/`;
+    // },
   },
 
   // 인증 프로바이더 설정

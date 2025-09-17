@@ -1,17 +1,30 @@
 'use client';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 function AuthButton() {
   const pathname = usePathname();
-  console.log(pathname);
+  const { data: session } = useSession();
   if (pathname === '/login') {
     return null;
   }
+  console.log('로그인 버튼의 세션 상태! 4', session);
   return (
-    <Link href="/login" className="px-2 font-bold text-[#87b8ad]">
-      로그인
-    </Link>
+    <>
+      {session ? (
+        <button
+          type="button"
+          onClick={() => signOut({ callbackUrl: '/' })}
+          className="px-2 font-bold text-[#87b8ad]">
+          로그아웃
+        </button>
+      ) : (
+        <Link href="/login" className="px-2 font-bold text-[#87b8ad]">
+          로그인
+        </Link>
+      )}
+    </>
   );
 }
 

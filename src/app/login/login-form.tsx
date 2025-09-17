@@ -65,7 +65,7 @@ export default function LoginForm() {
       {Object.values(providerConfig).map((provider) => (
         <button
           type="button"
-          onClick={() => signIn(provider.name.toLowerCase())}
+          onClick={() => signIn(provider.name.toLowerCase(), { callbackUrl: '/' })}
           key={provider.name}
           className={cn(
             provider.bgColor,

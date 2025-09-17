@@ -1,6 +1,8 @@
 import NextAuth from 'next-auth';
+import Github from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
-
+import Kakao from 'next-auth/providers/kakao';
+import Naver from 'next-auth/providers/naver';
 declare module 'next-auth' {
   interface Session {
     accessToken?: string; // OAuth 액세스 토큰
@@ -69,7 +71,7 @@ export const { handlers, auth } = NextAuth({
 
     // 로그인 허용 여부 결정
     async signIn({ user, account, profile, email, credentials }) {
-      console.log('로그인 성공 콜백:', user.email);
+      console.log('로그인 성공 콜백 ', user, account, profile, email, credentials);
       return true;
     },
 
@@ -83,7 +85,7 @@ export const { handlers, auth } = NextAuth({
   },
 
   // 인증 프로바이더 설정
-  providers: [Google],
+  providers: [Google, Kakao, Naver, Github],
   pages: {
     signIn: '/login',
   },

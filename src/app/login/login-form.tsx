@@ -1,4 +1,6 @@
+'use client';
 import { cn } from '@/lib/utils';
+import { signIn } from 'next-auth/react';
 const providerConfig = {
   google: {
     name: 'Google',
@@ -62,6 +64,8 @@ export default function LoginForm() {
     <form className="flex flex-col gap-3">
       {Object.values(providerConfig).map((provider) => (
         <button
+          type="button"
+          onClick={() => signIn(provider.name.toLowerCase())}
           key={provider.name}
           className={cn(
             provider.bgColor,

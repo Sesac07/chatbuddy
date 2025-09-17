@@ -28,12 +28,6 @@ export const { handlers, auth } = NextAuth({
     maxAge: 30 * 60, // 30분
   },
 
-  // 페이지 커스터마이징
-  // pages: {
-  //   signIn: '/auth/signin', // 로그인 페이지 경로
-  //   error: '/auth/error', // 에러 페이지 경로
-  // },
-
   // 이벤트 핸들러
   events: {
     async signIn({ user, account, profile }) {
@@ -88,6 +82,7 @@ export const { handlers, auth } = NextAuth({
   providers: [Google, Kakao, Naver, Github],
   pages: {
     signIn: '/login',
+    // error: '/auth/error', // 에러 페이지 경로
   },
 
   // secret: process.env.NEXTAUTH_SECRET,

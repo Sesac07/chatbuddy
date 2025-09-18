@@ -9,14 +9,13 @@ function AuthButton() {
   if (pathname === '/login') {
     return null;
   }
-  console.log('로그인 버튼의 세션 상태! 4', session);
   return (
     <>
       {session ? (
         <button
           type="button"
           onClick={() => signOut({ callbackUrl: '/' })}
-          className="px-2 font-bold text-[#87b8ad]">
+          className="cursor-pointer px-2 font-bold text-[#87b8ad]">
           로그아웃
         </button>
       ) : (

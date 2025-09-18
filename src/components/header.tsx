@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import AuthButton from './auth-button';
+
 function Header() {
   return (
     <header className="flex h-16 items-center justify-between bg-white">

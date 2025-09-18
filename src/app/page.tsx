@@ -1,4 +1,7 @@
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+
+export const dynamic = 'force-static';
 
 export default function Home() {
   return (
@@ -44,12 +47,16 @@ export default function Home() {
           당신의 성향에 맞는 방식으로 대화를 이어갑니다
         </p>
         <div className="mt-8 flex gap-4">
-          <button className="rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 py-3 font-semibold text-white shadow-md transition-all duration-200 hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg">
+          <Link
+            href="/chat"
+            className="cursor-pointer rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 py-3 font-semibold text-white shadow-md transition-all duration-200 hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg">
             T로 상담받기
-          </button>
-          <button className="rounded-lg border-2 border-slate-300 px-6 py-3 font-semibold text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50">
+          </Link>
+          <Link
+            href="/chat"
+            className="cursor-pointer rounded-lg border-2 border-slate-300 px-6 py-3 font-semibold text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50">
             F로 상담받기
-          </button>
+          </Link>
         </div>
       </div>
     </div>

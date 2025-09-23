@@ -31,7 +31,7 @@ export default function Home() {
 
             'pointer-events-none absolute -inset-[10px]',
 
-            '[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,transparent_70%)]',
+            '[mask-image:radial-gradient(ellipse_at_70%_0%,black_20%,transparent_80%)]',
           )}></div>
       </div>
 

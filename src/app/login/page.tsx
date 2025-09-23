@@ -1,8 +1,10 @@
 import LoginForm from './login-form';
 
+export const dynamic = 'force-static';
+
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-8 text-center">
           <h1 className="mb-2 text-3xl font-bold text-gray-900">로그인</h1>

@@ -48,6 +48,18 @@
   }
 }
 
+/* 스크롤바 숨기기 */
+@layer utilities {
+  .scrollbar-hide {
+    /* Firefox */
+    scrollbar-width: none;
+    /* Safari and Chrome */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
 /* 기본 body 스타일만 유지 */
 @layer base {
   body {

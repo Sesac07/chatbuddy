@@ -48,12 +48,12 @@ export default function Home() {
         </p>
         <div className="mt-8 flex gap-4">
           <Link
-            href="/chat"
+            href="/chat?type=T"
             className="cursor-pointer rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 py-3 font-semibold text-white shadow-md transition-all duration-200 hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg">
             T로 상담받기
           </Link>
           <Link
-            href="/chat"
+            href="/chat?type=F"
             className="cursor-pointer rounded-lg border-2 border-slate-300 px-6 py-3 font-semibold text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50">
             F로 상담받기
           </Link>

@@ -25,7 +25,7 @@ export default function MessageList({ messages, isTyping }: MessageListProps) {
   }, [messages, isTyping]);
 
   return (
-    <div className="scrollbar-hide flex-1 overflow-y-auto px-4 py-6">
+    <div className="flex-1 px-4 py-6">
       <div className="space-y-3">
         {messages.map((message) => (
           <div

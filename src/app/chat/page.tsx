@@ -14,6 +14,60 @@ export default function ChatPage() {
         sender: 'ai',
         timestamp: new Date(),
       },
+      {
+        id: crypto.randomUUID(),
+        content: '답변입니다. ~ddddddddddddd~~',
+        sender: 'user',
+        timestamp: new Date(),
+      },
+      {
+        id: crypto.randomUUID(),
+        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
+        sender: 'ai',
+        timestamp: new Date(),
+      },
+      {
+        id: crypto.randomUUID(),
+        content: '답변입니다. ~ddddddddddddd~~',
+        sender: 'user',
+        timestamp: new Date(),
+      },
+      {
+        id: crypto.randomUUID(),
+        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
+        sender: 'ai',
+        timestamp: new Date(),
+      },
+      {
+        id: crypto.randomUUID(),
+        content: '답변입니다. ~ddddddddddddd~~',
+        sender: 'user',
+        timestamp: new Date(),
+      },
+      {
+        id: crypto.randomUUID(),
+        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
+        sender: 'ai',
+        timestamp: new Date(),
+      },
+      {
+        id: crypto.randomUUID(),
+        content: '답변입니다. ~ddddddddddddd~~',
+        sender: 'user',
+        timestamp: new Date(),
+      },
+      {
+        id: crypto.randomUUID(),
+        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
+        sender: 'ai',
+        timestamp: new Date(),
+      },
+      {
+        id: crypto.randomUUID(),
+        content: '답변입니다. ~ddddddddddddd~~',
+        sender: 'user',
+        timestamp: new Date(),
+      },
     ],
     isTyping: false,
     isLoading: false,
@@ -63,16 +117,19 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-2xl flex-col bg-gray-50 lg:max-w-3xl">
-      {/* 채팅 메시지 영역 */}
-      <MessageList messages={chatState.messages} isTyping={chatState.isTyping} />
-
-      {/* 메시지 입력 영역 */}
-      <MessageInput
-        onSendMessage={sendMessage}
-        isLoading={chatState.isLoading}
-        disabled={chatState.isTyping}
-      />
+    <div className="flex h-[calc(100vh-4rem)] flex-col bg-gray-50">
+      <div className="flex-1 overflow-y-auto">
+        <div className="mx-auto max-w-2xl">
+          <MessageList messages={chatState.messages} isTyping={chatState.isTyping} />
+        </div>
+      </div>
+      <div className="mx-auto w-full max-w-2xl">
+        <MessageInput
+          onSendMessage={sendMessage}
+          isLoading={chatState.isLoading}
+          disabled={chatState.isTyping}
+        />
+      </div>
     </div>
   );
 }

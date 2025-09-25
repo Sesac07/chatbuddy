@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { ChatState, Message } from '../../types/chat';
+import { sendChatMessage } from './chat-actions';
 import MessageInput from './message-input';
 import MessageList from './message-list';
 
@@ -11,72 +12,24 @@ export default function ChatPage() {
       {
         id: crypto.randomUUID(),
         content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
-        sender: 'ai',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '답변입니다. ~ddddddddddddd~~',
-        sender: 'user',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
-        sender: 'ai',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '답변입니다. ~ddddddddddddd~~',
-        sender: 'user',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
-        sender: 'ai',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '답변입니다. ~ddddddddddddd~~',
-        sender: 'user',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
-        sender: 'ai',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '답변입니다. ~ddddddddddddd~~',
-        sender: 'user',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
-        sender: 'ai',
-        timestamp: new Date(),
-      },
-      {
-        id: crypto.randomUUID(),
-        content: '답변입니다. ~ddddddddddddd~~',
-        sender: 'user',
+        sender: 'model',
         timestamp: new Date(),
       },
     ],
     isTyping: false,
     isLoading: false,
   });
+  const [isPending, startTransition] = useTransition();
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
-  const sendMessage = async (content: string) => {
+  const handleFormSubmit = async (formData: FormData) => {
+    const content = formData.get('message') as string;
+
+    if (!content?.trim()) return;
+
     const userMessage: Message = {
       id: crypto.randomUUID(),
-      content,
+      content: content.trim(),
       sender: 'user',
       timestamp: new Date(),
     };
@@ -89,35 +42,46 @@ export default function ChatPage() {
       isTyping: true,
     }));
 
-    try {
-      // 상담 ai 호출 API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    startTransition(async () => {
+      try {
+        // Server Action 호출
+        const result = await sendChatMessage(formData, chatState);
 
-      const aiMessage: Message = {
-        id: crypto.randomUUID(),
-        content: '답변입니다. ~~~',
-        sender: 'ai',
-        timestamp: new Date(),
-      };
+        if (!result.success) {
+          throw new Error(result.error || 'AI 메시지 처리 실패');
+        }
 
-      setChatState((prev) => ({
-        ...prev,
-        messages: [...prev.messages, aiMessage],
-        isLoading: false,
-        isTyping: false,
-      }));
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setChatState((prev) => ({
-        ...prev,
-        isLoading: false,
-        isTyping: false,
-      }));
-    }
+        const aiMessage: Message = {
+          id: crypto.randomUUID(),
+          content: result.content || '',
+          sender: 'model',
+          timestamp: new Date(),
+        };
+
+        setChatState((prev) => ({
+          ...prev,
+          messages: [...prev.messages, aiMessage],
+          isLoading: false,
+          isTyping: false,
+        }));
+
+        // 응답 완료 후 포커스 복원
+        setTimeout(() => {
+          messageInputRef.current?.focus();
+        }, 100);
+      } catch (error) {
+        console.error('메세지 에러 :', error);
+        setChatState((prev) => ({
+          ...prev,
+          isLoading: false,
+          isTyping: false,
+        }));
+      }
+    });
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col bg-gray-50">
+    <div className="flex h-[calc(100vh-4rem)] flex-col justify-center bg-gray-50">
       <div className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-2xl">
           <MessageList messages={chatState.messages} isTyping={chatState.isTyping} />
@@ -125,9 +89,10 @@ export default function ChatPage() {
       </div>
       <div className="mx-auto w-full max-w-2xl">
         <MessageInput
-          onSendMessage={sendMessage}
-          isLoading={chatState.isLoading}
-          disabled={chatState.isTyping}
+          ref={messageInputRef}
+          onSubmit={handleFormSubmit}
+          isLoading={chatState.isLoading || isPending}
+          disabled={chatState.isTyping || isPending}
         />
       </div>
     </div>

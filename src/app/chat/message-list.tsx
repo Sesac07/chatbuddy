@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useRef } from 'react';
 import { Message } from '../../types/chat';
 
@@ -32,7 +33,7 @@ export default function MessageList({ messages, isTyping }: MessageListProps) {
             key={message.id}
             className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className="flex max-w-[85%] items-start space-x-3">
-              {message.sender === 'ai' && <Avatar />}
+              {message.sender === 'model' && <Avatar />}
               <div
                 className={`rounded-2xl px-4 py-3 ${
                   message.sender === 'user'

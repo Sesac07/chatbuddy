@@ -1,27 +1,35 @@
+'use client';
 import { useRef, useState } from 'react';
 
 type MessageInputProps = {
-  onSendMessage: (message: string) => void;
+  onSubmit: (formData: FormData) => void;
   isLoading?: boolean;
   disabled?: boolean;
+  ref?: React.RefObject<HTMLTextAreaElement | null>;
 };
 
 export default function MessageInput({
-  onSendMessage,
+  onSubmit,
   isLoading = false,
   disabled = false,
+  ref,
 }: MessageInputProps) {
   const [inputValue, setInputValue] = useState('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSendMessage = () => {
+  // ref가 전달되면 사용하고, 아니면 내부 ref 사용
+  const textareaRef = ref;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!inputValue.trim() || isLoading || disabled) return;
 
-    onSendMessage(inputValue.trim());
+    const formData = new FormData(e.currentTarget);
+    onSubmit(formData);
     setInputValue('');
 
     // 전송 후 텍스트에리어 높이 리셋
-    if (textareaRef.current) {
+    if (textareaRef?.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = '46px';
     }
@@ -30,12 +38,14 @@ export default function MessageInput({
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      if (formRef.current) {
+        formRef.current.requestSubmit();
+      }
     }
   };
 
   const adjustTextareaHeight = () => {
-    if (textareaRef.current) {
+    if (textareaRef?.current) {
       const textarea = textareaRef.current;
       textarea.style.height = 'auto';
 
@@ -54,10 +64,11 @@ export default function MessageInput({
 
   return (
     <div className="mb-5 rounded-[20px] bg-white px-4 py-4 shadow-xl">
-      <div className="flex items-center space-x-3">
+      <form ref={formRef} onSubmit={handleSubmit} className="flex items-center space-x-3">
         <div className="flex flex-1 justify-center">
           <textarea
             ref={textareaRef}
+            name="message"
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
@@ -68,7 +79,7 @@ export default function MessageInput({
           />
         </div>
         <button
-          onClick={handleSendMessage}
+          type="submit"
           disabled={!inputValue.trim() || isLoading || disabled}
           className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#a7d8a7] text-white transition-colors hover:bg-[#8fbc8f] disabled:cursor-not-allowed disabled:bg-gray-300">
           {isLoading ? (
@@ -105,7 +116,7 @@ export default function MessageInput({
             </svg>
           )}
         </button>
-      </div>
+      </form>
     </div>
   );
 }

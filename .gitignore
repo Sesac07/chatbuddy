@@ -51,3 +51,4 @@ next-env.d.ts
 
 /mysql
 docker-compose.yml
+/src/generated/prisma

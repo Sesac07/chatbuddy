@@ -1,5 +1,4 @@
 import Header from '@/components/header';
-import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -25,12 +24,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="ko">
       <body className="min-h-screen antialiased">
-        <SessionProvider session={session}>
+        <SessionProvider>
           <div className="mx-auto flex max-w-7xl flex-col px-2">
             <Header />
             <main>{children}</main>

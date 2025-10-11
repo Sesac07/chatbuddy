@@ -1,12 +1,14 @@
 'use client';
+
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 function AuthButton() {
   const pathname = usePathname();
-  const { data: session } = useSession();
-  if (pathname === '/login') {
+  const { data: session, status } = useSession();
+
+  if (pathname === '/login' || status === 'loading') {
     return null;
   }
   return (

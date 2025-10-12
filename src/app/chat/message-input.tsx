@@ -1,24 +1,32 @@
 'use client';
+import { useModal } from '@/components/modal-provider';
+import { useSession } from 'next-auth/react';
 import { useRef, useState } from 'react';
 
 type MessageInputProps = {
   onSubmit: (formData: FormData) => void;
-  isLoading?: boolean;
-  disabled?: boolean;
-  ref?: React.RefObject<HTMLTextAreaElement | null>;
+  isLoading: boolean;
+  disabled: boolean;
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
 };
 
 export default function MessageInput({
   onSubmit,
   isLoading = false,
   disabled = false,
-  ref,
+  textareaRef,
 }: MessageInputProps) {
   const [inputValue, setInputValue] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
+  const { status } = useSession();
+  const { openModal } = useModal();
 
-  // ref가 전달되면 사용하고, 아니면 내부 ref 사용
-  const textareaRef = ref;
+  const submitSolution = () => {
+    if (status === 'unauthenticated') {
+      openModal();
+      return;
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,7 +37,7 @@ export default function MessageInput({
     setInputValue('');
 
     // 전송 후 텍스트에리어 높이 리셋
-    if (textareaRef?.current) {
+    if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = '46px';
     }
@@ -45,7 +53,7 @@ export default function MessageInput({
   };
 
   const adjustTextareaHeight = () => {
-    if (textareaRef?.current) {
+    if (textareaRef.current) {
       const textarea = textareaRef.current;
       textarea.style.height = 'auto';
 
@@ -65,6 +73,22 @@ export default function MessageInput({
   return (
     <div className="mb-5 rounded-[20px] bg-white px-4 py-4 shadow-xl">
       <form ref={formRef} onSubmit={handleSubmit} className="flex items-center space-x-3">
+        <button
+          type="button"
+          className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-[#ff9966] px-4 py-2.5 text-sm font-medium text-white shadow-md transition-all duration-200 hover:bg-[#ff7043] hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+          onClick={submitSolution}>
+          <svg
+            className="h-4 w-4 transition-transform group-hover:rotate-12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round">
+            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+          <span>솔루션받기</span>
+        </button>
         <div className="flex flex-1 justify-center">
           <textarea
             ref={textareaRef}

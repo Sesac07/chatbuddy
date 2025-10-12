@@ -20,7 +20,7 @@ export default function ChatPage() {
     isLoading: false,
   });
   const [isPending, startTransition] = useTransition();
-  const messageInputRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleFormSubmit = async (formData: FormData) => {
     const content = formData.get('message') as string;
@@ -67,7 +67,7 @@ export default function ChatPage() {
 
         // 응답 완료 후 포커스 복원
         setTimeout(() => {
-          messageInputRef.current?.focus();
+          textareaRef.current?.focus();
         }, 100);
       } catch (error) {
         console.error('메세지 에러 :', error);
@@ -89,7 +89,7 @@ export default function ChatPage() {
       </div>
       <div className="mx-auto w-full max-w-2xl">
         <MessageInput
-          ref={messageInputRef}
+          textareaRef={textareaRef}
           onSubmit={handleFormSubmit}
           isLoading={chatState.isLoading || isPending}
           disabled={chatState.isTyping || isPending}

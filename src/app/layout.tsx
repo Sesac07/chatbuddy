@@ -1,4 +1,5 @@
 import Header from '@/components/header';
+import { ModalProvider } from '@/components/modal-provider';
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -28,11 +29,13 @@ export default async function RootLayout({
     <html lang="ko">
       <body className="min-h-screen antialiased">
         <SessionProvider>
-          <div className="mx-auto flex max-w-7xl flex-col px-2">
-            <Header />
-            <main>{children}</main>
-            {/* <footer>footer 입니다.</footer> */}
-          </div>
+          <ModalProvider>
+            <div className="mx-auto flex max-w-7xl flex-col px-2">
+              <Header />
+              <main>{children}</main>
+              {/* <footer>footer 입니다.</footer> */}
+            </div>
+          </ModalProvider>
         </SessionProvider>
       </body>
     </html>

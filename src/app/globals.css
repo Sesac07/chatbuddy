@@ -66,4 +66,7 @@
     background-color: #fafafa;
     color: #0f172a;
   }
+  button {
+    cursor: pointer;
+  }
 }

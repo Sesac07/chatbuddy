@@ -1,4 +1,5 @@
 'use client';
+import LoginModal from '@/components/login-modal';
 import { useModal } from '@/components/modal-provider';
 import { useSession } from 'next-auth/react';
 import { useRef, useState } from 'react';
@@ -19,11 +20,11 @@ export default function MessageInput({
   const [inputValue, setInputValue] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const { status } = useSession();
-  const { openModal } = useModal();
+  const { showModal } = useModal();
 
   const submitSolution = () => {
     if (status === 'unauthenticated') {
-      openModal();
+      showModal('login-modal', <LoginModal />);
       return;
     }
   };

@@ -40,10 +40,10 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
       {isOpen && (
         <div
-          className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
           onClick={closeModal}>
           <div
-            className="animate-in zoom-in-95 flex min-w-[320px] flex-col gap-6 rounded-2xl bg-white p-8 shadow-2xl duration-200"
+            className="flex min-w-[320px] flex-col gap-6 rounded-2xl bg-white p-8 shadow-2xl"
             onClick={(e) => e.stopPropagation()}>
             {/* 아이콘 */}
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#a7d8a7]/20">

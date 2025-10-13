@@ -6,6 +6,7 @@ import { createContext, useContext, useState } from 'react';
 interface ModalContextType {
   openModal: () => void;
   closeModal: () => void;
+  isOpen: boolean;
 }
 
 const ModalContext = createContext<ModalContextType | null>(null);
@@ -36,7 +37,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <ModalContext.Provider value={{ openModal, closeModal }}>
+    <ModalContext.Provider value={{ openModal, closeModal, isOpen }}>
       {children}
       {isOpen && (
         <div

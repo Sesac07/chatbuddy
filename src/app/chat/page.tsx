@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from 'react';
 import { ChatState, Message } from '../../types/chat';
 import { sendChatMessage } from './chat-actions';
+import ConsultSidebar from './consult-sidbar';
 import MessageInput from './message-input';
 import MessageList from './message-list';
 
@@ -81,7 +82,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col justify-center bg-gray-50">
+    <div className="relative flex h-[calc(100vh-4rem)] flex-col justify-center overflow-hidden bg-gray-50">
       <div className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-2xl">
           <MessageList messages={chatState.messages} isTyping={chatState.isTyping} />
@@ -95,6 +96,7 @@ export default function ChatPage() {
           disabled={chatState.isTyping || isPending}
         />
       </div>
+      <ConsultSidebar />
     </div>
   );
 }

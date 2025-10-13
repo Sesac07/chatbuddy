@@ -27,6 +27,9 @@ export default function MessageInput({
       showModal('login-modal', <LoginModal />);
       return;
     }
+    // 서버로 솔루션 요청
+
+    // 솔루션 받은 후 모달로 내용 전달
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

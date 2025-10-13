@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
 import { ChatState, Message } from '../../types/chat';
 import { sendChatMessage } from './chat-actions';
@@ -8,6 +9,9 @@ import MessageInput from './message-input';
 import MessageList from './message-list';
 
 export default function ChatPage() {
+  const searchParams = useSearchParams();
+  const consultingType = searchParams.get('type') === 'T' ? 'T' : 'F';
+
   const [chatState, setChatState] = useState<ChatState>({
     messages: [
       {
@@ -45,8 +49,8 @@ export default function ChatPage() {
 
     startTransition(async () => {
       try {
-        // Server Action 호출
-        const result = await sendChatMessage(formData, chatState);
+        // Server Action 호출 (상담 타입 전달)
+        const result = await sendChatMessage(formData, chatState, consultingType);
 
         if (!result.success) {
           throw new Error(result.error || 'AI 메시지 처리 실패');

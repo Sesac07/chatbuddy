@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, Fragment, useContext, useState } from 'react';
 
 interface Modal {
   id: string;
@@ -46,11 +46,11 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     <ModalContext.Provider value={{ showModal, closeModal, modalList }}>
       {children}
       {modalList.length > 0 && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div
+          onClick={() => closeModal()}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
           {modalList.map((modal) => (
-            <div key={modal.id} onClick={() => closeModal(modal.id)}>
-              {modal.content}
-            </div>
+            <Fragment key={modal.id}>{modal.content}</Fragment>
           ))}
         </div>
       )}

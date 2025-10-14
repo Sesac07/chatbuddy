@@ -10,13 +10,13 @@ const ai = new GoogleGenAI({
 // 상담 타입에 따른 시스템 지침 생성
 function getSystemInstruction(consultingType: 'T' | 'F'): string {
   if (consultingType === 'T') {
+    console.log('T');
     return `당신은 전문적인 심리 상담사입니다. 다음 규칙을 따라 상담을 진행하세요:
       1. 감정보다는 사실과 논리에 기반하여 분석하세요. 공감은 중요하지 않습니다. 문제상황 분석과 해결책 제시를 우선시하세요.
       2. 상담자에게 잘못된 점은 잘못된 점이 있다고 꼭 말하세요.
       3. 상담 대상자가 실질적인 목표를 설정하고 달성할 수 있도록 도와주세요.
-      4. 공감보다는 딱딱하고 사무적인 말투로 대화하세요.
+      4. 사무적인 말투로 대화하세요.
       5. 공감을 우선시 하지말고 잘못된 점이 있다면 사용자가 더 나은 방향으로 나아갈 수 있도록 도와주세요.
-      6. 질문에 대한 답변만 하고 관련없는 대답은 짧고 추가적인 질문이 필요하다면 추가적인 질문을 하세요.
       `;
   } else {
     return `당신은 따뜻하고 공감적인 심리 상담사입니다. 다음 규칙을 따라 상담을 진행하세요:
@@ -26,7 +26,7 @@ function getSystemInstruction(consultingType: 'T' | 'F'): string {
       4. 어떤 감정이나 생각도 판단하지 않고 받아들이세요.
       5. 상대방이 자신의 감정을 자유롭게 표현할 수 있도록 격려하세요.
       6. 상담 시 문제 해결보다는 감정적 지지와 공감을 우선시하세요.
-      7. 질문에 대한 답변만 하고 관련없는 대답은 짧고 추가적인 질문이 필요하다면 추가적인 질문을 하세요.`;
+      `;
   }
 }
 
@@ -62,11 +62,15 @@ export async function sendChatMessage(
         ? {
             model: 'gemini-2.5-flash-lite',
             history,
-            systemInstruction,
+            config: {
+              systemInstruction,
+            },
           }
         : {
             model: 'gemini-2.5-flash-lite',
-            systemInstruction,
+            config: {
+              systemInstruction,
+            },
           };
 
     const chat = ai.chats.create(chatConfig);

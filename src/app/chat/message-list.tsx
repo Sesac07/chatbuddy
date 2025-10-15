@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import { Message } from '../../types/chat';
+import ReactMarkdown from 'react-markdown';
 
 interface MessageListProps {
   messages: Message[];
@@ -40,7 +41,9 @@ export default function MessageList({ messages, isTyping }: MessageListProps) {
                     ? 'ml-auto bg-[#e8f2ff] text-gray-800'
                     : 'border border-gray-100 bg-white text-gray-800 shadow-sm'
                 }`}>
-                <div className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</div>
+                <div className="text-sm leading-relaxed whitespace-pre-wrap">
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                </div>
                 <p
                   className={`mt-1 text-xs ${
                     message.sender === 'user' ? 'text-gray-600' : 'text-gray-500'

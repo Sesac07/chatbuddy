@@ -1,14 +1,17 @@
 'use client';
 import LoginModal from '@/components/login-modal';
 import { useModal } from '@/components/modal-provider';
+import { Message } from '@/types/chat';
 import { useSession } from 'next-auth/react';
 import { useRef, useState } from 'react';
+import { getSolution } from './solution-actions';
 
 type MessageInputProps = {
   onSubmit: (formData: FormData) => void;
   isLoading: boolean;
   disabled: boolean;
   textareaRef: React.RefObject<HTMLTextAreaElement | null>;
+  messages: Message[];
 };
 
 export default function MessageInput({
@@ -16,20 +19,30 @@ export default function MessageInput({
   isLoading = false,
   disabled = false,
   textareaRef,
+  messages,
 }: MessageInputProps) {
   const [inputValue, setInputValue] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const { status } = useSession();
   const { showModal } = useModal();
 
-  const submitSolution = () => {
+  const submitSolution = async () => {
     if (status === 'unauthenticated') {
       showModal('login-modal', <LoginModal />);
       return;
     }
-    // 서버로 솔루션 요청
 
-    // 솔루션 받은 후 모달로 내용 전달
+    if (messages.length <= 1) {
+      alert('대화 내용이 충분하지 않습니다.');
+      return;
+    }
+
+    try {
+      const result = await getSolution(messages);
+    } catch (error) {
+      console.error('Solution error:', error);
+      alert('솔루션 생성 중 오류가 발생했습니다.');
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

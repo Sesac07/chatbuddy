@@ -98,6 +98,7 @@ export default function ChatPage() {
           onSubmit={handleFormSubmit}
           isLoading={chatState.isLoading || isPending}
           disabled={chatState.isTyping || isPending}
+          messages={chatState.messages}
         />
       </div>
       <ConsultSidebar />

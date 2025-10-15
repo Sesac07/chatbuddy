@@ -1,11 +1,7 @@
 'use server';
 
-import { GoogleGenAI } from '@google/genai';
+import { ai } from '@/lib/gemini';
 import { ChatState, History, Message } from '../../types/chat';
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY!,
-});
 
 // 상담 타입에 따른 시스템 지침 생성
 function getSystemInstruction(consultingType: 'T' | 'F'): string {

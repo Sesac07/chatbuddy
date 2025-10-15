@@ -5,6 +5,7 @@ import { Message } from '@/types/chat';
 import { useSession } from 'next-auth/react';
 import { useRef, useState } from 'react';
 import { getSolution } from './solution-actions';
+import SolutionModal from './solution-modal';
 
 type MessageInputProps = {
   onSubmit: (formData: FormData) => void;
@@ -22,6 +23,7 @@ export default function MessageInput({
   messages,
 }: MessageInputProps) {
   const [inputValue, setInputValue] = useState('');
+  const [solutionLoading, setSolutionLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const { status } = useSession();
   const { showModal } = useModal();
@@ -38,10 +40,23 @@ export default function MessageInput({
     }
 
     try {
+      setSolutionLoading(true);
       const result = await getSolution(messages);
+
+      if (result.success && result.data) {
+        showModal(
+          'solution-modal',
+          <SolutionModal
+            summaryTitle={result.data.summaryTitle}
+            summaryContent={result.data.summaryContent}
+            solution={result.data.solution}
+          />,
+        );
+      }
     } catch (error) {
-      console.error('Solution error:', error);
       alert('솔루션 생성 중 오류가 발생했습니다.');
+    } finally {
+      setSolutionLoading(false);
     }
   };
 
@@ -93,7 +108,8 @@ export default function MessageInput({
         <button
           type="button"
           className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-[#ff9966] px-4 py-2.5 text-sm font-medium text-white shadow-md transition-all duration-200 hover:bg-[#ff7043] hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-          onClick={submitSolution}>
+          onClick={submitSolution}
+          disabled={solutionLoading}>
           <svg
             className="h-4 w-4 transition-transform group-hover:rotate-12"
             viewBox="0 0 24 24"

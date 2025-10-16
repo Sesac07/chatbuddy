@@ -8,22 +8,25 @@ import ConsultSidebar from './consult-sidbar';
 import MessageInput from './message-input';
 import MessageList from './message-list';
 
+const FRIRST_CHAT_STATE: ChatState = {
+  messages: [
+    {
+      id: crypto.randomUUID(),
+      content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
+      sender: 'model',
+      timestamp: new Date(),
+    },
+  ],
+  isTyping: false,
+  isLoading: false,
+};
+
 export default function ChatPage() {
   const searchParams = useSearchParams();
   const consultingType = searchParams.get('type') === 'T' ? 'T' : 'F';
 
-  const [chatState, setChatState] = useState<ChatState>({
-    messages: [
-      {
-        id: crypto.randomUUID(),
-        content: '안녕하세요! 당신의 고민을 들려주세요. 무엇을 도와드릴까요?',
-        sender: 'model',
-        timestamp: new Date(),
-      },
-    ],
-    isTyping: false,
-    isLoading: false,
-  });
+  const [chatState, setChatState] = useState<ChatState>(FRIRST_CHAT_STATE);
+  // const [consultationList, setConsultationList] = useState<consultationList[]>([]);
   const [isPending, startTransition] = useTransition();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -85,6 +88,11 @@ export default function ChatPage() {
     });
   };
 
+  const resetChatState = () => {
+    setChatState(FRIRST_CHAT_STATE);
+    textareaRef.current?.focus();
+  };
+
   return (
     <div className="relative flex h-[calc(100vh-4rem)] flex-col justify-center overflow-hidden bg-gray-50">
       <div className="flex-1 overflow-y-auto">
@@ -99,6 +107,7 @@ export default function ChatPage() {
           isLoading={chatState.isLoading || isPending}
           disabled={chatState.isTyping || isPending}
           messages={chatState.messages}
+          resetChatState={resetChatState}
         />
       </div>
       <ConsultSidebar />

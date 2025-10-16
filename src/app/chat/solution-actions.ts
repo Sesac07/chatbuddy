@@ -1,6 +1,8 @@
 'use server';
 
+import { auth } from '@/lib/auth';
 import { ai } from '@/lib/gemini';
+import { prisma } from '@/lib/prisma';
 import { Message } from '@/types/chat';
 
 // 구조화된 출력을 위한 타입 정의
@@ -61,9 +63,41 @@ export async function getSolution(messages: Message[]) {
     // JSON 파싱하여 타입 안전하게 반환
     const parsedResponse: ConsultationSummary = JSON.parse(response.text || '{}');
 
+    // 인증된 사용자 정보 가져오기
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        error: '로그인이 필요합니다.',
+      };
+    }
+
+    const userId = BigInt(session.user.id);
+
+    // DB에 상담 데이터 저장 (메시지 포함)
+    const consultation = await prisma.consultations.create({
+      data: {
+        user_id: userId,
+        title: parsedResponse.summaryTitle,
+        solution_summary: {
+          summaryContent: parsedResponse.summaryContent,
+          solution: parsedResponse.solution,
+        },
+        messages: messages.slice(1).map((message) => ({
+          sender: message.sender,
+          content: message.content,
+          timestamp: new Date().toISOString(),
+        })),
+        status: 'completed',
+        completed_at: new Date(),
+      },
+    });
+
     return {
       success: true,
       data: parsedResponse,
+      id: consultation.consultation_id.toString(),
+      date: consultation.created_at?.toISOString() || new Date().toISOString(),
     };
   } catch (error) {
     console.error('Solution generation error:', error);

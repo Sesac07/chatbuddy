@@ -1,11 +1,9 @@
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import NextAuth from 'next-auth';
 import Github from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import Kakao from 'next-auth/providers/kakao';
 import Naver from 'next-auth/providers/naver';
-
-const prisma = new PrismaClient();
 
 declare module 'next-auth' {
   interface Session {

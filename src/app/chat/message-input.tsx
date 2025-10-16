@@ -13,6 +13,7 @@ type MessageInputProps = {
   disabled: boolean;
   textareaRef: React.RefObject<HTMLTextAreaElement | null>;
   messages: Message[];
+  resetChatState: () => void;
 };
 
 export default function MessageInput({
@@ -21,6 +22,7 @@ export default function MessageInput({
   disabled = false,
   textareaRef,
   messages,
+  resetChatState,
 }: MessageInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [solutionLoading, setSolutionLoading] = useState(false);
@@ -34,8 +36,8 @@ export default function MessageInput({
       return;
     }
 
-    if (messages.length <= 1) {
-      alert('대화 내용이 충분하지 않습니다.');
+    if (!messages.some((message) => message.sender === 'user')) {
+      alert('사용자 메시지가 충분하지 않습니다.');
       return;
     }
 
@@ -52,6 +54,9 @@ export default function MessageInput({
             solution={result.data.solution}
           />,
         );
+        resetChatState();
+      } else {
+        alert(result.error || '솔루션 생성 중 오류가 발생했습니다.');
       }
     } catch (error) {
       alert('솔루션 생성 중 오류가 발생했습니다.');
@@ -110,16 +115,39 @@ export default function MessageInput({
           className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-[#ff9966] px-4 py-2.5 text-sm font-medium text-white shadow-md transition-all duration-200 hover:bg-[#ff7043] hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           onClick={submitSolution}
           disabled={solutionLoading}>
-          <svg
-            className="h-4 w-4 transition-transform group-hover:rotate-12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round">
-            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-          </svg>
+          {solutionLoading ? (
+            <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+                fill="none"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+          ) : (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
           <span>솔루션받기</span>
         </button>
         <div className="flex flex-1 justify-center">

@@ -6,7 +6,6 @@ import { ChatState, History, Message } from '../../types/chat';
 // 상담 타입에 따른 시스템 지침 생성
 function getSystemInstruction(consultingType: 'T' | 'F'): string {
   if (consultingType === 'T') {
-    console.log('T');
     return `당신은 전문적인 심리 상담사입니다. 다음 규칙을 따라 상담을 진행하세요:
       1. 감정보다는 사실과 논리에 기반하여 분석하세요. 공감은 중요하지 않습니다. 문제상황 분석과 해결책 제시를 우선시하세요.
       2. 상담자에게 잘못된 점은 잘못된 점이 있다고 꼭 말하세요.

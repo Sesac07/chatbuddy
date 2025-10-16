@@ -8,27 +8,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model consultation_messages {
-  message_id      BigInt        @id @default(autoincrement())
-  consultation_id BigInt
-  sender_type     String        @db.VarChar(20)
-  message_content String        @db.Text
-  created_at      DateTime?     @default(now()) @db.Timestamp(0)
-  consultations   consultations @relation(fields: [consultation_id], references: [consultation_id], onDelete: Cascade, onUpdate: NoAction, map: "consultation_messages_ibfk_1")
-
-  @@index([consultation_id, created_at], map: "idx_consultation_created")
-}
-
 model consultations {
   consultation_id       BigInt                  @id @default(autoincrement())
   user_id               BigInt
   title                 String                  @db.VarChar(200)
   status                String?                 @default("active") @db.VarChar(20)
-  solution_summary      String?                 @db.Text
+  solution_summary      Json?                   
+  messages              Json?                   
   created_at            DateTime?               @default(now()) @db.Timestamp(0)
   updated_at            DateTime?               @default(now()) @db.Timestamp(0)
   completed_at          DateTime?               @db.Timestamp(0)
-  consultation_messages consultation_messages[]
   users                 users                   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "consultations_ibfk_1")
 
   @@index([user_id, created_at(sort: Desc)], map: "idx_user_created")

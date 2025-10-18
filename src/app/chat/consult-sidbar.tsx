@@ -1,7 +1,9 @@
 'use client';
+import { useModal } from '@/components/modal-provider';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { ConsultationItem, deleteConsultation } from './consult-actions';
+import SolutionModal from './solution-modal';
 
 type ConsultSidebarProps = {
   consultationList: ConsultationItem[];
@@ -13,10 +15,7 @@ export default function ConsultSidebar({
   getConsultationList,
 }: ConsultSidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
-
-  useEffect(() => {
-    getConsultationList();
-  }, []);
+  const { showModal } = useModal();
 
   const handleDelete = async (e: React.MouseEvent, consultId: string) => {
     e.stopPropagation();
@@ -33,6 +32,23 @@ export default function ConsultSidebar({
       alert(result.error || '삭제에 실패했습니다.');
     }
   };
+
+  const handleSelectChat = (consult: ConsultationItem) => {
+    showModal(
+      'solution-modal',
+      <SolutionModal
+        summaryTitle={consult.title}
+        summaryContent={consult.solution_summary.summaryContent}
+        solution={consult.solution_summary.solution}
+      />,
+    );
+  };
+
+  // 컴포넌트 마운트 시 상담 목록 조회
+  useEffect(() => {
+    getConsultationList();
+  }, []);
+
   return (
     <>
       {!isOpen && (
@@ -79,6 +95,7 @@ export default function ConsultSidebar({
               {consultationList.map((consult) => (
                 <li
                   key={consult.id}
+                  onClick={() => handleSelectChat(consult)}
                   className="group relative mb-2 w-full cursor-pointer rounded-lg border border-gray-200 bg-white p-3 text-left transition-all hover:border-[#a7d8a7] hover:bg-[#a7d8a7]/5 hover:shadow-md">
                   <div className="pr-8">
                     <h3 className="truncate font-medium text-gray-900">{consult.title}</h3>

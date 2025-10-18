@@ -2,10 +2,12 @@
 
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { ConsultationSummary } from './solution-actions';
 
 export interface ConsultationItem {
   id: string;
   title: string;
+  solution_summary: ConsultationSummary;
   date: string;
   status: string;
 }
@@ -35,6 +37,7 @@ export async function getConsultations(): Promise<ConsultationItem[]> {
             title: true,
             created_at: true,
             status: true,
+            solution_summary: true,
           },
         },
       },
@@ -49,6 +52,7 @@ export async function getConsultations(): Promise<ConsultationItem[]> {
     return consultations.map((consult) => ({
       id: consult.consultation_id.toString(),
       title: consult.title,
+      solution_summary: consult.solution_summary as unknown as ConsultationSummary,
       date: consult.created_at?.toISOString().split('T')[0] || '',
       status: consult.status || 'active',
     }));

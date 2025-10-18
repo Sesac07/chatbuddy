@@ -84,6 +84,7 @@ export async function getSolution(messages: Message[]) {
           solution: parsedResponse.solution,
         },
         messages: messages.slice(1).map((message) => ({
+          id: message.id,
           sender: message.sender,
           content: message.content,
           timestamp: new Date().toISOString(),

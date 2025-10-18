@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
 import { ChatState, Message } from '../../types/chat';
 import { sendChatMessage } from './chat-actions';
+import { ConsultationItem, getConsultations } from './consult-actions';
 import ConsultSidebar from './consult-sidbar';
 import MessageInput from './message-input';
 import MessageList from './message-list';
@@ -26,7 +27,7 @@ export default function ChatPage() {
   const consultingType = searchParams.get('type') === 'T' ? 'T' : 'F';
 
   const [chatState, setChatState] = useState<ChatState>(FRIRST_CHAT_STATE);
-  // const [consultationList, setConsultationList] = useState<consultationList[]>([]);
+  const [consultationList, setConsultationList] = useState<ConsultationItem[]>([]);
   const [isPending, startTransition] = useTransition();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -93,6 +94,11 @@ export default function ChatPage() {
     textareaRef.current?.focus();
   };
 
+  const getConsultationList = async () => {
+    const result = await getConsultations();
+    setConsultationList(result);
+  };
+
   return (
     <div className="relative flex h-[calc(100vh-4rem)] flex-col justify-center overflow-hidden bg-gray-50">
       <div className="flex-1 overflow-y-auto">
@@ -108,9 +114,13 @@ export default function ChatPage() {
           disabled={chatState.isTyping || isPending}
           messages={chatState.messages}
           resetChatState={resetChatState}
+          getConsultationList={getConsultationList}
         />
       </div>
-      <ConsultSidebar />
+      <ConsultSidebar
+        consultationList={consultationList}
+        getConsultationList={getConsultationList}
+      />
     </div>
   );
 }

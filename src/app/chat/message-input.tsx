@@ -14,6 +14,7 @@ type MessageInputProps = {
   textareaRef: React.RefObject<HTMLTextAreaElement | null>;
   messages: Message[];
   resetChatState: () => void;
+  getConsultationList: () => void;
 };
 
 export default function MessageInput({
@@ -23,6 +24,7 @@ export default function MessageInput({
   textareaRef,
   messages,
   resetChatState,
+  getConsultationList,
 }: MessageInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [solutionLoading, setSolutionLoading] = useState(false);
@@ -55,6 +57,7 @@ export default function MessageInput({
           />,
         );
         resetChatState();
+        getConsultationList();
       } else {
         alert(result.error || '솔루션 생성 중 오류가 발생했습니다.');
       }

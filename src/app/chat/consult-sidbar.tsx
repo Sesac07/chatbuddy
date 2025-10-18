@@ -1,7 +1,7 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-import { ConsultationItem } from './consult-actions';
+import { ConsultationItem, deleteConsultation } from './consult-actions';
 
 type ConsultSidebarProps = {
   consultationList: ConsultationItem[];
@@ -17,6 +17,22 @@ export default function ConsultSidebar({
   useEffect(() => {
     getConsultationList();
   }, []);
+
+  const handleDelete = async (e: React.MouseEvent, consultId: string) => {
+    e.stopPropagation();
+
+    if (!confirm('이 상담을 삭제하시겠습니까?')) {
+      return;
+    }
+
+    const result = await deleteConsultation(consultId);
+
+    if (result.success) {
+      getConsultationList();
+    } else {
+      alert(result.error || '삭제에 실패했습니다.');
+    }
+  };
   return (
     <>
       {!isOpen && (
@@ -63,9 +79,28 @@ export default function ConsultSidebar({
               {consultationList.map((consult) => (
                 <li
                   key={consult.id}
-                  className="mb-2 w-full cursor-pointer rounded-lg border border-gray-200 bg-white p-3 text-left transition-all hover:border-[#a7d8a7] hover:bg-[#a7d8a7]/5 hover:shadow-md">
-                  <h3 className="truncate font-medium text-gray-900">{consult.title}</h3>
-                  <p className="mt-2 text-xs text-gray-400">{consult.date}</p>
+                  className="group relative mb-2 w-full cursor-pointer rounded-lg border border-gray-200 bg-white p-3 text-left transition-all hover:border-[#a7d8a7] hover:bg-[#a7d8a7]/5 hover:shadow-md">
+                  <div className="pr-8">
+                    <h3 className="truncate font-medium text-gray-900">{consult.title}</h3>
+                    <p className="mt-2 text-xs text-gray-400">{consult.date}</p>
+                  </div>
+                  {/* 삭제 버튼 */}
+                  <button
+                    onClick={(e) => handleDelete(e, consult.id)}
+                    className="absolute top-2 right-2 rounded-md p-1 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-gray-100 hover:text-gray-600"
+                    aria-label="상담 삭제">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round">
+                      <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                  </button>
                 </li>
               ))}
             </ul>

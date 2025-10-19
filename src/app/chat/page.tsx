@@ -90,6 +90,10 @@ export default function ChatPage() {
   };
 
   const resetChatState = () => {
+    if (chatState.messages.length === 1) {
+      // 초기 메시지인 경우 리셋하지 않음
+      return;
+    }
     setChatState(FRIRST_CHAT_STATE);
     textareaRef.current?.focus();
   };
@@ -118,6 +122,7 @@ export default function ChatPage() {
         />
       </div>
       <ConsultSidebar
+        resetChatState={resetChatState}
         consultationList={consultationList}
         getConsultationList={getConsultationList}
       />

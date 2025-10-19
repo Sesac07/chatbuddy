@@ -8,11 +8,13 @@ import SolutionModal from './solution-modal';
 type ConsultSidebarProps = {
   consultationList: ConsultationItem[];
   getConsultationList: () => void;
+  resetChatState: () => void;
 };
 
 export default function ConsultSidebar({
   consultationList,
   getConsultationList,
+  resetChatState,
 }: ConsultSidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
   const { showModal } = useModal();
@@ -124,7 +126,9 @@ export default function ConsultSidebar({
           )}
         </div>
         <div className="border-t border-gray-200 p-4">
-          <button className="w-full rounded-lg bg-[#a7d8a7] px-4 py-2 font-medium text-white transition-colors hover:bg-[#8fbc8f]">
+          <button
+            onClick={resetChatState}
+            className="w-full rounded-lg bg-[#a7d8a7] px-4 py-2 font-medium text-white transition-colors hover:bg-[#8fbc8f]">
             + 새 상담 시작
           </button>
         </div>

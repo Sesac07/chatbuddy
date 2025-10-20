@@ -1,6 +1,9 @@
 'use server';
 
+import { auth } from '@/lib/auth';
 import { ai } from '@/lib/gemini';
+import { checkRateLimit } from '@/lib/rate-limiter';
+import { headers } from 'next/headers';
 import { ChatState, History, Message } from '../../types/chat';
 
 // 상담 타입에 따른 시스템 지침 생성
@@ -40,6 +43,22 @@ export async function sendChatMessage(
   chatState: ChatState,
   consultingType: 'T' | 'F' = 'F',
 ) {
+  const session = await auth();
+  console.log(' session?.user?.id ', session);
+
+  const headersList = await headers();
+  const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
+  const identifier = session?.user?.id || `ip:${ip}`;
+
+  // 분당 10회 (로그인/비로그인 모두)
+  const rateCheck = checkRateLimit(identifier, 10);
+  if (!rateCheck.allowed) {
+    return {
+      success: false,
+      error: `요청 한도를 초과했습니다. ${rateCheck.retryAfter}초 후 다시 시도하세요.`,
+    };
+  }
+
   const message = formData.get('message') as string;
   if (!message?.trim()) {
     return {

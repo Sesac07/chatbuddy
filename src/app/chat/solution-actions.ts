@@ -3,6 +3,7 @@
 import { auth } from '@/lib/auth';
 import { ai } from '@/lib/gemini';
 import { prisma } from '@/lib/prisma';
+import { checkRateLimit } from '@/lib/rate-limiter';
 import { Message } from '@/types/chat';
 
 // 구조화된 출력을 위한 타입 정의
@@ -13,6 +14,24 @@ export interface ConsultationSummary {
 }
 
 export async function getSolution(messages: Message[]) {
+  // 인증 체크
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      error: '로그인이 필요합니다.',
+    };
+  }
+
+  // 분당 3회
+  const rateCheck = checkRateLimit(session.user.id, 3);
+  if (!rateCheck.allowed) {
+    return {
+      success: false,
+      error: `요청 한도를 초과했습니다. ${rateCheck.retryAfter}초 후 다시 시도하세요.`,
+    };
+  }
+
   try {
     const conversation = messages.slice(1).map((message: Message) => ({
       role: message.sender === 'model' ? 'model' : 'user',
@@ -62,15 +81,6 @@ export async function getSolution(messages: Message[]) {
 
     // JSON 파싱하여 타입 안전하게 반환
     const parsedResponse: ConsultationSummary = JSON.parse(response.text || '{}');
-
-    // 인증된 사용자 정보 가져오기
-    const session = await auth();
-    if (!session?.user?.id) {
-      return {
-        success: false,
-        error: '로그인이 필요합니다.',
-      };
-    }
 
     const userId = BigInt(session.user.id);
 

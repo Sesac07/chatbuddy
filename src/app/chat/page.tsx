@@ -1,5 +1,6 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
 import { ChatState, Message } from '../../types/chat';
@@ -30,6 +31,7 @@ export default function ChatPage() {
   const [consultationList, setConsultationList] = useState<ConsultationItem[]>([]);
   const [isPending, startTransition] = useTransition();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { data: session } = useSession();
 
   const handleFormSubmit = async (formData: FormData) => {
     const content = formData.get('message') as string;
@@ -121,11 +123,13 @@ export default function ChatPage() {
           getConsultationList={getConsultationList}
         />
       </div>
-      <ConsultSidebar
-        resetChatState={resetChatState}
-        consultationList={consultationList}
-        getConsultationList={getConsultationList}
-      />
+      {session && (
+        <ConsultSidebar
+          resetChatState={resetChatState}
+          consultationList={consultationList}
+          getConsultationList={getConsultationList}
+        />
+      )}
     </div>
   );
 }

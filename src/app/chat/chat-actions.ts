@@ -44,7 +44,6 @@ export async function sendChatMessage(
   consultingType: 'T' | 'F' = 'F',
 ) {
   const session = await auth();
-  console.log(' session?.user?.id ', session);
 
   const headersList = await headers();
   const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';

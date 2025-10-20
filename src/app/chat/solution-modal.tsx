@@ -143,14 +143,7 @@ export default function SolutionModal({
         <button
           onClick={() => closeModal()}
           className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50 hover:shadow active:scale-95">
-          취소하기
-        </button>
-        <button
-          onClick={() => {
-            // 저장 기능 구현 나중에 할 것.
-          }}
-          className="rounded-lg bg-[#92c6bb] px-5 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:bg-[#7db3a8] hover:shadow-lg active:scale-95">
-          저장하기
+          닫기
         </button>
       </div>
     </div>

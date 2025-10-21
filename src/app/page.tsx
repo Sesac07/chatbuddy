@@ -1,78 +1,64 @@
-import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+
+export const dynamic = 'force-static';
 
 export default function Home() {
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-sans sm:p-20">
-      <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-center font-mono text-sm/6 sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{' '}
-            <code className="rounded bg-black/[.05] px-1 py-0.5 font-mono font-semibold dark:bg-white/[.06]">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">Save and see your changes instantly.</li>
-        </ol>
+    <div
+      className={cn(
+        'transition-bg relative flex flex-col items-center justify-center bg-zinc-50 text-slate-950 dark:bg-zinc-900',
+        'h-[calc(100vh-4rem)]',
+      )}>
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className={cn(
+            '[background-image:var(--white-gradient),var(--aurora)]',
+            'dark:[background-image:var(--dark-gradient),var(--aurora)]',
+            '[background-size:300%,_200%]',
+            '[background-position:50%_50%,50%_50%]',
 
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <a
-            className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer">
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="flex h-10 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm font-medium transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:w-auto sm:px-5 sm:text-base md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer">
-            Read our docs
-          </a>
+            'blur-[10px] invert filter dark:invert-0',
+            'opacity-50 will-change-transform',
+
+            'after:absolute after:inset-0 after:content-[""]',
+            'after:[background-image:var(--white-gradient),var(--aurora)]',
+            'after:dark:[background-image:var(--dark-gradient),var(--aurora)]',
+            'after:[background-size:200%,_100%]',
+            'after:[background-attachment:fixed]',
+            'after:mix-blend-difference',
+            'after:animate-aurora',
+
+            'pointer-events-none absolute -inset-[10px]',
+
+            '[mask-image:radial-gradient(ellipse_at_70%_0%,black_20%,transparent_80%)]',
+          )}></div>
+      </div>
+
+      {/* 메인 콘텐츠 */}
+      <div className="relative z-10 flex flex-col items-center justify-center space-y-8 px-4">
+        <p className="bg-gradient-to-r from-teal-600 via-cyan-600 to-emerald-600 bg-clip-text text-center text-5xl font-bold text-transparent">
+          마음의 무게를 덜어주는 작은 대화
+        </p>
+        <p className="bg-gradient-to-r from-teal-600 via-cyan-600 to-emerald-600 bg-clip-text text-center text-5xl font-bold text-transparent">
+          지금 시작하세요
+        </p>
+        <p className="max-w-2xl text-center text-xl text-slate-600">
+          당신의 성향에 맞는 방식으로 대화를 이어갑니다
+        </p>
+        <div className="mt-8 flex gap-4">
+          <Link
+            href="/chat?type=T"
+            className="cursor-pointer rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 py-3 font-semibold text-white shadow-md transition-all duration-200 hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg">
+            T로 상담받기
+          </Link>
+          <Link
+            href="/chat?type=F"
+            className="cursor-pointer rounded-lg border-2 border-slate-300 px-6 py-3 font-semibold text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50">
+            F로 상담받기
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex flex-wrap items-center justify-center gap-[24px]">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer">
-          <Image aria-hidden src="/file.svg" alt="File icon" width={16} height={16} />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer">
-          <Image aria-hidden src="/window.svg" alt="Window icon" width={16} height={16} />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer">
-          <Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }

@@ -1,26 +1,78 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* 오로라 배경 그라디언트 - 실제 사용됨 */
+  --white-gradient: repeating-linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #ffffff 7%,
+    transparent 10%,
+    transparent 12%,
+    #ffffff 16%
+  );
+  --dark-gradient: repeating-linear-gradient(
+    100deg,
+    #000000 0%,
+    #000000 7%,
+    transparent 10%,
+    transparent 12%,
+    #000000 16%
+  );
+  --aurora: repeating-linear-gradient(
+    100deg,
+    #86efac 10%,
+    #c4b5fd 15%,
+    #fcd34d 20%,
+    #fbb6ce 25%,
+    #93c5fd 30%,
+    #a5b4fc 35%,
+    #6ee7b7 40%
+  );
+
+  /* 애니메이션 - 실제 사용됨 */
+  --animate-aurora: aurora 60s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes aurora {
+  from {
+    background-position:
+      50% 50%,
+      50% 50%;
+  }
+  to {
+    background-position:
+      350% 50%,
+      350% 50%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 스크롤바 숨기기 */
+@layer utilities {
+  .scrollbar-hide {
+    /* Firefox */
+    scrollbar-width: none;
+    /* Safari and Chrome */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+/* 기본 body 스타일만 유지 */
+@layer base {
+  body {
+    background-color: #fafafa;
+    color: #0f172a;
+  }
+  button {
+    cursor: pointer;
+  }
+  ul,
+  ol {
+    padding: 0; /* 좌측 padding 제거 */
+    margin: 0; /* 기본 margin 제거 */
+    list-style: none; /* 불릿/숫자 제거 */
+  }
 }

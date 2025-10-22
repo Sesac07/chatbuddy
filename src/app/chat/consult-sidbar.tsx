@@ -17,6 +17,7 @@ export default function ConsultSidebar({
   resetChatState,
 }: ConsultSidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { showModal } = useModal();
 
   const handleDelete = async (e: React.MouseEvent, consultId: string) => {
@@ -46,9 +47,14 @@ export default function ConsultSidebar({
     );
   };
 
-  // 컴포넌트 마운트 시 상담 목록 조회
   useEffect(() => {
-    getConsultationList();
+    const load = async () => {
+      setIsLoading(true);
+      await getConsultationList();
+      setIsLoading(false);
+    };
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -88,7 +94,14 @@ export default function ConsultSidebar({
         </div>
         {/* 상담 목록 */}
         <div className="flex-1 overflow-y-auto p-2">
-          {consultationList.length === 0 ? (
+          {isLoading ? (
+            <div className="flex h-full items-center justify-center">
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-[#a7d8a7]"></div>
+                <p className="text-sm text-gray-500">불러오는 중...</p>
+              </div>
+            </div>
+          ) : consultationList.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <p className="text-sm text-gray-500">상담 내역이 없습니다</p>
             </div>

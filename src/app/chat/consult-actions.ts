@@ -19,35 +19,25 @@ export async function getConsultations(): Promise<ConsultationItem[]> {
   try {
     const session = await auth();
 
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return [];
     }
 
-    const user = await prisma.users.findFirst({
+    const consultations = await prisma.consultations.findMany({
       where: {
-        email: session.user.email,
+        user_id: BigInt(session.user.id),
+      },
+      orderBy: {
+        created_at: 'desc',
       },
       select: {
-        consultations: {
-          orderBy: {
-            created_at: 'desc',
-          },
-          select: {
-            consultation_id: true,
-            title: true,
-            created_at: true,
-            status: true,
-            solution_summary: true,
-          },
-        },
+        consultation_id: true,
+        title: true,
+        created_at: true,
+        status: true,
+        solution_summary: true,
       },
     });
-
-    if (!user) {
-      return [];
-    }
-
-    const consultations = user.consultations;
 
     return consultations.map((consult) => ({
       id: consult.consultation_id.toString(),

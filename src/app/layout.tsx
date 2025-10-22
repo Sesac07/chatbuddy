@@ -17,7 +17,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'ChatBuddy',
-  description: '고민 상담 서비스 입니다.',
+  description: '성향에 맞는 상담 서비스 입니다.',
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default async function RootLayout({
